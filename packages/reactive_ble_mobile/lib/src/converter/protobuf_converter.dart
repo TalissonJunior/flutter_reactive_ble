@@ -3,6 +3,7 @@ import 'package:reactive_ble_platform_interface/reactive_ble_platform_interface.
 
 import '../generated/bledata.pb.dart' as pb;
 import '../select_from.dart';
+import 'dart:typed_data';
 
 abstract class ProtobufConverter {
   BleStatus bleStatusFrom(List<int> data);

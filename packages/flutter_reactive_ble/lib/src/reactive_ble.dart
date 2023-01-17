@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_reactive_ble/src/connected_device_operation.dart';
-import 'package:flutter_reactive_ble/src/debug_logger.dart';
+import 'package:flutter_reactive_ble/src/debug_logger.dart' as dLogger;
 import 'package:flutter_reactive_ble/src/device_connector.dart';
 import 'package:flutter_reactive_ble/src/device_scanner.dart';
 import 'package:flutter_reactive_ble/src/discovered_devices_registry.dart';
@@ -24,7 +24,7 @@ class FlutterReactiveBle {
     required DeviceScanner deviceScanner,
     required DeviceConnector deviceConnector,
     required ConnectedDeviceOperation connectedDeviceOperation,
-    required Logger debugLogger,
+    required dLogger.Logger debugLogger,
     required Future<void> initialization,
     required ReactiveBlePlatform reactiveBlePlatform,
   }) {
@@ -90,7 +90,7 @@ class FlutterReactiveBle {
   late DeviceConnector _deviceConnector;
   late ConnectedDeviceOperation _connectedDeviceOperator;
   late DeviceScanner _deviceScanner;
-  late Logger _debugLogger;
+  late dLogger.Logger _debugLogger;
 
   /// Initializes this [FlutterReactiveBle] instance and its platform-specific
   /// counterparts.
@@ -99,15 +99,13 @@ class FlutterReactiveBle {
   /// operation is triggered.
   Future<void> initialize() async {
     if (_initialization == null) {
-      _debugLogger = DebugLogger(
+      _debugLogger = dLogger.DebugLogger(
         'REACTIVE_BLE',
         print,
       );
 
       ReactiveBlePlatform.instance =
-          const ReactiveBleMobilePlatformFactory().create(
-        logger: _debugLogger,
-      );
+          const ReactiveBleMobilePlatformFactory().create();
 
       _blePlatform = ReactiveBlePlatform.instance;
 
@@ -338,6 +336,4 @@ class FlutterReactiveBle {
   /// Use [LogLevel.verbose] for full debug output. Make sure to  run this only for debugging purposes.
   /// Use [LogLevel.none] to disable logging. This is also the default.
   set logLevel(LogLevel logLevel) => _debugLogger.logLevel = logLevel;
-
-  LogLevel get logLevel => _debugLogger.logLevel;
 }
